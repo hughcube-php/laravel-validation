@@ -24,8 +24,13 @@ class Validator extends \Illuminate\Validation\Validator
         array $customAttributes = []
     ) {
         $this->appendImplicitRules([
-            'SetNullIfEmpty', 'RemoveIfEmpty', 'RemoveIfEmptyString', 'Default', 'SetNullIfEmptyString',
-            'SetNullIfZero',
+            'Default',
+
+            'SetNullIfEmpty',
+            'SetNullIfEmptyString',
+
+            'RemoveIfEmpty',
+            'RemoveIfEmptyString',
         ]);
 
         parent::__construct($translator, $data, $rules, $messages, $customAttributes);
@@ -40,15 +45,15 @@ class Validator extends \Illuminate\Validation\Validator
      * If the value is not set to a default value.
      *
      * @param string $attribute
-     * @param mixed  $value
-     * @param array  $parameters
+     * @param mixed $value
+     * @param array $parameters
      *
      * @return bool
      */
     public function validateDefault($attribute, $value, $parameters)
     {
         if (!array_key_exists($attribute, $this->data)) {
-            Arr::set($this->data, $attribute, Arr::get($parameters, 0));
+            $this->setAttributeValue($attribute, Arr::get($parameters, 0));
         }
 
         return true;
@@ -58,14 +63,14 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is a empty value.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     public function validateSetNullIfEmpty($attribute, $value)
     {
         if (empty($value)) {
-            Arr::set($this->data, $attribute, null);
+            $this->setAttributeValue($attribute, null);
         }
 
         return true;
@@ -75,14 +80,15 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is a "".
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
+     * @param array $parameters
      *
      * @return bool
      */
-    public function validateSetNullIfEmptyString($attribute, $value)
+    public function validateSetNullIfEmptyString($attribute, $value, $parameters)
     {
-        if ('' === $value) {
-            Arr::set($this->data, $attribute, null);
+        if ('' === $value || (is_string($value) && 'trim' === Arr::get($parameters, 0) && '' === trim($value))) {
+            $this->setAttributeValue($attribute, null);
         }
 
         return true;
@@ -92,14 +98,14 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is "0" or 0.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     public function validateSetNullIfZero($attribute, $value)
     {
         if (0 === $value || '0' === $value) {
-            Arr::set($this->data, $attribute, null);
+            $this->setAttributeValue($attribute, null);
         }
 
         return true;
@@ -109,14 +115,14 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is empty value.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     public function validateRemoveIfEmpty($attribute, $value)
     {
         if (empty($value)) {
-            Arr::forget($this->data, $attribute);
+            $this->removeAttributeValue($attribute);
         }
 
         return true;
@@ -126,14 +132,14 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is NULL.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     public function validateRemoveIfNull($attribute, $value)
     {
         if (null === $value) {
-            Arr::forget($this->data, $attribute);
+            $this->removeAttributeValue($attribute);
         }
 
         return true;
@@ -143,14 +149,15 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is "".
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
+     * @param array $parameters
      *
      * @return bool
      */
-    public function validateRemoveIfEmptyString($attribute, $value)
+    public function validateRemoveIfEmptyString($attribute, $value, $parameters)
     {
-        if ('' === $value) {
-            Arr::forget($this->data, $attribute);
+        if ('' === $value || (is_string($value) && 'trim' === Arr::get($parameters, 0) && '' === trim($value))) {
+            $this->removeAttributeValue($attribute);
         }
 
         return true;
@@ -160,16 +167,37 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is "0" or 0.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     public function validateRemoveIfZero($attribute, $value)
     {
         if ('0' === $value || 0 === $value) {
-            Arr::forget($this->data, $attribute);
+            $this->removeAttributeValue($attribute);
         }
 
         return true;
+    }
+
+    /**
+     * Set the value for the data attribute.
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setAttributeValue($name, $value)
+    {
+        Arr::set($this->data, $name, $value);
+    }
+
+    /**
+     * Delete an attribute of data.
+     *
+     * @param string $name
+     */
+    public function removeAttributeValue($name)
+    {
+        Arr::forget($this->data, $name);
     }
 }
