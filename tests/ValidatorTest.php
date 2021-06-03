@@ -16,17 +16,17 @@ class ValidatorTest extends TestCase
     {
         $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default']])->validate();
-        $this->assertArrayHasKey($key, $results);
+        $this->assertTrue(Arr::has($results, $key));
         $this->assertSame(null, $results[$key]);
 
         $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:1']])->validate();
-        $this->assertArrayHasKey($key, $results);
+        $this->assertTrue(Arr::has($results, $key));
         $this->assertSame('1', $results[$key]);
 
         $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:0']])->validate();
-        $this->assertArrayHasKey($key, $results);
+        $this->assertTrue(Arr::has($results, $key));
         $this->assertSame('0', $results[$key]);
     }
 
@@ -51,7 +51,7 @@ class ValidatorTest extends TestCase
                 ->make([$key => $value[0]], [$key => 'set_null_if_empty'])
                 ->validate();
 
-            $this->assertArrayHasKey($key, $results);
+            $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
         }
     }
@@ -77,7 +77,7 @@ class ValidatorTest extends TestCase
                 ->make([$key => $value[0]], [$key => 'set_null_if_empty_string'])
                 ->validate();
 
-            $this->assertArrayHasKey($key, $results);
+            $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
         }
     }
@@ -103,7 +103,7 @@ class ValidatorTest extends TestCase
                 ->make([$key => $value[0]], [$key => 'set_null_if_zero'])
                 ->validate();
 
-            $this->assertArrayHasKey($key, $results);
+            $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
         }
     }
