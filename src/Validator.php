@@ -40,8 +40,8 @@ class Validator extends \Illuminate\Validation\Validator
      * If the value is not set to a default value.
      *
      * @param string $attribute
-     * @param mixed $value
-     * @param array $parameters
+     * @param mixed  $value
+     * @param array  $parameters
      *
      * @return bool
      */
@@ -58,7 +58,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is a empty value.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -75,7 +75,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is a "".
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -92,7 +92,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Set to NULL if it is "0" or 0.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -109,7 +109,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is empty value.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -126,7 +126,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is NULL.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -143,7 +143,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is "".
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -160,7 +160,7 @@ class Validator extends \Illuminate\Validation\Validator
      * Delete the attribute if it is "0" or 0.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
