@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: hugh.li
  * Date: 2021/6/2
- * Time: 7:32 下午
+ * Time: 7:32 下午.
  */
 
 namespace HughCube\Laravel\Validation;
-
 
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Arr;
@@ -43,6 +42,7 @@ class Validator extends \Illuminate\Validation\Validator
      * @param $attribute
      * @param $value
      * @param $parameters
+     *
      * @return bool
      */
     public function validateDefault($attribute, $value, $parameters)
@@ -59,6 +59,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateSetNullIfEmpty($attribute, $value)
@@ -75,6 +76,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateSetNullIfEmptyString($attribute, $value)
@@ -91,6 +93,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateSetNullIfZero($attribute, $value)
@@ -107,6 +110,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateRemoveIfEmpty($attribute, $value)
@@ -123,6 +127,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateRemoveIfNull($attribute, $value)
@@ -139,6 +144,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateRemoveIfEmptyString($attribute, $value)
@@ -155,6 +161,7 @@ class Validator extends \Illuminate\Validation\Validator
      *
      * @param $attribute
      * @param $value
+     *
      * @return bool
      */
     public function validateRemoveIfZero($attribute, $value)
