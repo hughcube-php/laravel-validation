@@ -213,30 +213,23 @@ class ValidatorTest extends TestCase
         /** Zero is passable */
         $key = $this->randomString();
         $this->assertFalse(
-            $this->getValidationFactory()
-                ->make([$key => 0], [$key => ['required']])
-                ->fails()
+            $this->getValidationFactory()->make([$key => 0], [$key => ['required']])->fails()
         );
 
         /** The key can be returned normally */
         $key = $this->randomString();
-        $results = $this->getValidationFactory()
-            ->make([$key => 0], [$key => ['required']])
-            ->validate();
+        $results = $this->getValidationFactory()->make([$key => 0], [$key => ['required']])->validate();
         $this->assertTrue(Arr::has($results, $key));
 
         /** Data cleaning */
         $key = $this->randomString();
         $this->assertTrue(
-            $this->getValidationFactory()
-                ->make([$key => 0], [$key => ['remove_if_zero', 'required']])
-                ->fails()
+            $this->getValidationFactory()->make([$key => 0], [$key => ['remove_if_zero', 'required']])->fails()
         );
 
         /** The key can be removed later */
         $key = $this->randomString();
-        $results = $this->getValidationFactory()
-            ->make([$key => 0], [$key => ['required', 'remove_if_zero']])
+        $results = $this->getValidationFactory()->make([$key => 0], [$key => ['required', 'remove_if_zero']])
             ->validate();
         $this->assertFalse(Arr::has($results, $key));
     }
