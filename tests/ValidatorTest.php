@@ -23,12 +23,12 @@ class ValidatorTest extends TestCase
         $key = Str::uuid()->toString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:1']])->validate();
         $this->assertArrayHasKey($key, $results);
-        $this->assertSame("1", $results[$key]);
+        $this->assertSame('1', $results[$key]);
 
         $key = Str::uuid()->toString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:0']])->validate();
         $this->assertArrayHasKey($key, $results);
-        $this->assertSame("0", $results[$key]);
+        $this->assertSame('0', $results[$key]);
     }
 
     public function testValidateSetNullIfEmpty()
@@ -36,11 +36,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, null],
-                ["", null],
+                ['', null],
                 [0, null],
                 [null, null],
                 [[], null],
-                ["0", null],
+                ['0', null],
                 [true, true],
                 [1, 1],
                 [$key = Str::uuid()->toString(), $key],
@@ -62,11 +62,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, false],
-                ["", null],
+                ['', null],
                 [0, 0],
                 [null, null],
                 [[], []],
-                ["0", "0"],
+                ['0', '0'],
                 [true, true],
                 [1, 1],
                 [$key = Str::uuid()->toString(), $key],
@@ -88,11 +88,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, false],
-                ["", ""],
+                ['', ''],
                 [0, null],
                 [null, null],
                 [[], []],
-                ["0", null],
+                ['0', null],
                 [true, true],
                 [1, 1],
                 [$key = Str::uuid()->toString(), $key],
@@ -114,11 +114,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, false],
-                ["", false],
+                ['', false],
                 [0, false],
                 [null, false],
                 [[], false],
-                ["0", false],
+                ['0', false],
                 [true, true],
                 [1, true],
                 [Str::uuid()->toString(), true],
@@ -139,11 +139,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, true],
-                ["", true],
+                ['', true],
                 [0, true],
                 [null, false],
                 [[], true],
-                ["0", true],
+                ['0', true],
                 [true, true],
                 [1, true],
                 [Str::uuid()->toString(), true],
@@ -164,11 +164,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, true],
-                ["", false],
+                ['', false],
                 [0, true],
                 [null, true],
                 [[], true],
-                ["0", true],
+                ['0', true],
                 [true, true],
                 [1, true],
                 [Str::uuid()->toString(), true],
@@ -189,11 +189,11 @@ class ValidatorTest extends TestCase
         foreach (
             [
                 [false, true],
-                ["", true],
+                ['', true],
                 [0, false],
                 [null, true],
                 [[], true],
-                ["0", false],
+                ['0', false],
                 [true, true],
                 [1, true],
                 [Str::uuid()->toString(), true],
