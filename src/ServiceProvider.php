@@ -6,40 +6,41 @@
  * Time: 10:32 下午.
  */
 
-namespace HughCube\Laravel\Package;
+namespace HughCube\Laravel\Validation;
 
-use Illuminate\Foundation\Application as LaravelApplication;
+use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use Laravel\Lumen\Application as LumenApplication;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
     /**
-     * Boot the provider.
-     */
-    public function boot()
-    {
-        $source = realpath(dirname(__DIR__) . '/config/config.php');
-
-        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('package.php')]);
-        } elseif ($this->app instanceof LumenApplication) {
-            $this->app->configure('package');
-        }
-    }
-
-    /**
-     * Register the provider.
+     * Register services.
+     *
+     * @return void
      */
     public function register()
     {
-        $this->app->singleton(
-            'package',
-            function ($app) {
-                $config = $app->make('config')->get('package', []);
+    }
 
-                return new Manager($config);
-            }
-        );
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->getValidationFactory()->resolver(function ($translator, $data, $rules, $messages, $customAttributes) {
+            return new Validator($translator, $data, $rules, $messages, $customAttributes);
+        });
+    }
+
+    /**
+     * Get a validation factory instance.
+     *
+     * @return \Illuminate\Contracts\Validation\Factory
+     */
+    protected function getValidationFactory()
+    {
+        return app(Factory::class);
     }
 }

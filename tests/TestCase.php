@@ -6,9 +6,10 @@
  * Time: 11:36 下午.
  */
 
-namespace HughCube\Laravel\Package\Tests;
+namespace HughCube\Laravel\Validation\Tests;
 
-use HughCube\Laravel\Package\ServiceProvider as PackageServiceProvider;
+use HughCube\Laravel\Validation\ServiceProvider;
+use Illuminate\Contracts\Validation\Factory;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
@@ -21,38 +22,17 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
-            PackageServiceProvider::class,
+            ServiceProvider::class,
         ];
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * Get a validation factory instance.
+     *
+     * @return \Illuminate\Contracts\Validation\Factory
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getValidationFactory()
     {
-        $this->setupCache($app);
-
-        /** @var \Illuminate\Config\Repository $appConfig */
-        $appConfig = $app['config'];
-        $appConfig->set('captchaCode', (require dirname(__DIR__) . '/config/config.php'));
-    }
-
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function setupCache($app)
-    {
-        /** @var \Illuminate\Config\Repository $appConfig */
-        $appConfig = $app['config'];
-
-        $appConfig->set('cache', [
-            'default' => 'default',
-            'stores' => [
-                'default' => [
-                    'driver' => 'file',
-                    'path' => sprintf('/tmp/test/%s', md5(serialize([__METHOD__]))),
-                ],
-            ],
-        ]);
+        return app(Factory::class);
     }
 }
