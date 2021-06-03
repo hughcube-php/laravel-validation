@@ -9,23 +9,22 @@
 namespace HughCube\Laravel\Validation\Tests;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 class ValidatorTest extends TestCase
 {
     public function testValidateDefault()
     {
-        $key = Str::uuid()->toString();
+        $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default']])->validate();
         $this->assertArrayHasKey($key, $results);
         $this->assertSame(null, $results[$key]);
 
-        $key = Str::uuid()->toString();
+        $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:1']])->validate();
         $this->assertArrayHasKey($key, $results);
         $this->assertSame('1', $results[$key]);
 
-        $key = Str::uuid()->toString();
+        $key = $this->randomString();
         $results = $this->getValidationFactory()->make([], [$key => ['default:0']])->validate();
         $this->assertArrayHasKey($key, $results);
         $this->assertSame('0', $results[$key]);
@@ -43,11 +42,11 @@ class ValidatorTest extends TestCase
                 ['0', null],
                 [true, true],
                 [1, 1],
-                [$key = Str::uuid()->toString(), $key],
+                [$key = $this->randomString(), $key],
                 [[1], [1]],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'set_null_if_empty'])
                 ->validate();
@@ -69,11 +68,11 @@ class ValidatorTest extends TestCase
                 ['0', '0'],
                 [true, true],
                 [1, 1],
-                [$key = Str::uuid()->toString(), $key],
+                [$key = $this->randomString(), $key],
                 [[1], [1]],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'set_null_if_empty_string'])
                 ->validate();
@@ -95,11 +94,11 @@ class ValidatorTest extends TestCase
                 ['0', null],
                 [true, true],
                 [1, 1],
-                [$key = Str::uuid()->toString(), $key],
+                [$key = $this->randomString(), $key],
                 [[1], [1]],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'set_null_if_zero'])
                 ->validate();
@@ -121,11 +120,11 @@ class ValidatorTest extends TestCase
                 ['0', false],
                 [true, true],
                 [1, true],
-                [Str::uuid()->toString(), true],
+                [$this->randomString(), true],
                 [[1], true],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'remove_if_empty'])
                 ->validate();
@@ -146,11 +145,11 @@ class ValidatorTest extends TestCase
                 ['0', true],
                 [true, true],
                 [1, true],
-                [Str::uuid()->toString(), true],
+                [$this->randomString(), true],
                 [[1], true],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'remove_if_null'])
                 ->validate();
@@ -171,11 +170,11 @@ class ValidatorTest extends TestCase
                 ['0', true],
                 [true, true],
                 [1, true],
-                [Str::uuid()->toString(), true],
+                [$this->randomString(), true],
                 [[1], true],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'remove_if_empty_string'])
                 ->validate();
@@ -196,16 +195,21 @@ class ValidatorTest extends TestCase
                 ['0', false],
                 [true, true],
                 [1, true],
-                [Str::uuid()->toString(), true],
+                [$this->randomString(), true],
                 [[1], true],
             ] as $value
         ) {
-            $key = Str::uuid()->toString();
+            $key = $this->randomString();
             $results = $this->getValidationFactory()
                 ->make([$key => $value[0]], [$key => 'remove_if_zero'])
                 ->validate();
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
+    }
+
+    protected function randomString()
+    {
+        return md5(random_bytes(100));
     }
 }
