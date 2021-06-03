@@ -35,4 +35,9 @@ class TestCase extends OrchestraTestCase
     {
         return app(Factory::class);
     }
+
+    protected function randomString()
+    {
+        return md5(random_bytes(100));
+    }
 }
