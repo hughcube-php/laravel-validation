@@ -15,17 +15,17 @@ class ValidatorTest extends TestCase
     public function testValidateDefault()
     {
         $key = $this->randomString();
-        $results = $this->getValidationFactory()->make([], [$key => ['default']])->validate();
+        $results = $this->validate([], [$key => ['default']]);
         $this->assertTrue(Arr::has($results, $key));
         $this->assertSame(null, $results[$key]);
 
         $key = $this->randomString();
-        $results = $this->getValidationFactory()->make([], [$key => ['default:1']])->validate();
+        $results = $this->validate([], [$key => ['default:1']]);
         $this->assertTrue(Arr::has($results, $key));
         $this->assertSame('1', $results[$key]);
 
         $key = $this->randomString();
-        $results = $this->getValidationFactory()->make([], [$key => ['default:0']])->validate();
+        $results = $this->validate([], [$key => ['default:0']]);
         $this->assertTrue(Arr::has($results, $key));
         $this->assertSame('0', $results[$key]);
     }
@@ -47,9 +47,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'set_null_if_empty'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'set_null_if_empty']);
 
             $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
@@ -74,9 +72,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'set_null_if_empty_string'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'set_null_if_empty_string']);
 
             $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
@@ -99,9 +95,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'set_null_if_empty_string:trim'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'set_null_if_empty_string:trim']);
 
             $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
@@ -125,9 +119,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'set_null_if_zero'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'set_null_if_zero']);
 
             $this->assertTrue(Arr::has($results, $key));
             $this->assertSame($value[1], Arr::get($results, $key));
@@ -151,9 +143,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'remove_if_empty'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'remove_if_empty']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
@@ -176,9 +166,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'remove_if_null'])
-                ->validate();
+            $results =$this->validate([$key => $value[0]], [$key => 'remove_if_null']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
@@ -202,9 +190,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'remove_if_empty_string'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'remove_if_empty_string']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
@@ -226,9 +212,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'remove_if_empty_string:trim'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'remove_if_empty_string:trim']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
@@ -251,9 +235,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results = $this->getValidationFactory()
-                ->make([$key => $value[0]], [$key => 'remove_if_zero'])
-                ->validate();
+            $results = $this->validate([$key => $value[0]], [$key => 'remove_if_zero']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
@@ -269,7 +251,7 @@ class ValidatorTest extends TestCase
 
         /** The key can be returned normally */
         $key = $this->randomString();
-        $results = $this->getValidationFactory()->make([$key => 0], [$key => ['required']])->validate();
+        $results = $this->validate([$key => 0], [$key => ['required']]);
         $this->assertTrue(Arr::has($results, $key));
 
         /** Data cleaning */
@@ -280,8 +262,7 @@ class ValidatorTest extends TestCase
 
         /** The key can be removed later */
         $key = $this->randomString();
-        $results = $this->getValidationFactory()->make([$key => 0], [$key => ['required', 'remove_if_zero']])
-            ->validate();
+        $results = $this->validate([$key => 0], [$key => ['required', 'remove_if_zero']]);
         $this->assertFalse(Arr::has($results, $key));
     }
 }

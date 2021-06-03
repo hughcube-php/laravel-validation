@@ -40,4 +40,23 @@ class TestCase extends OrchestraTestCase
     {
         return md5(random_bytes(100));
     }
+
+    /**
+     * @param $data
+     * @param $rules
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validate($data, $rules)
+    {
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = $this->getValidationFactory()->make($data, $rules);
+
+        if(method_exists($validator, 'valid')){
+            $validator->validate();
+            return $validator->valid();
+        }
+
+        return $validator->validate();
+    }
 }
