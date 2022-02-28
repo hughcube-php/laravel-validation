@@ -166,7 +166,7 @@ class ValidatorTest extends TestCase
             ] as $value
         ) {
             $key = $this->randomString();
-            $results =$this->validate([$key => $value[0]], [$key => 'remove_if_null']);
+            $results = $this->validate([$key => $value[0]], [$key => 'remove_if_null']);
 
             $this->assertSame($value[1], Arr::has($results, $key));
         }
