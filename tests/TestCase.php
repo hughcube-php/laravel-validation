@@ -46,16 +46,19 @@ class TestCase extends OrchestraTestCase
     /**
      * @param $data
      * @param $rules
-     * @return array
+     *
      * @throws ValidationException
+     *
+     * @return array
      */
     protected function validate($data, $rules)
     {
         /** @var Validator $validator */
         $validator = $this->getValidationFactory()->make($data, $rules);
 
-        if(method_exists($validator, 'valid')){
+        if (method_exists($validator, 'valid')) {
             $validator->validate();
+
             return $validator->valid();
         }
 

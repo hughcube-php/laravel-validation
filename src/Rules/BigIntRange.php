@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: hugh.li
  * Date: 2022/5/30
- * Time: 16:39
+ * Time: 16:39.
  */
 
 namespace HughCube\Laravel\Validation\Rules;

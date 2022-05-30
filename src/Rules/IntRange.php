@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: hugh.li
  * Date: 2022/5/30
- * Time: 16:39
+ * Time: 16:39.
  */
 
 namespace HughCube\Laravel\Validation\Rules;
@@ -23,6 +23,7 @@ class IntRange implements Rule
     public static function new(): IntRange
     {
         $class = static::class;
+
         return new $class();
     }
 
@@ -36,6 +37,7 @@ class IntRange implements Rule
                 $min = gmp_init($this->min);
                 $max = gmp_init($this->max);
                 $v = gmp_init($value);
+
                 return 0 <= gmp_cmp($v, $min) && 0 <= gmp_cmp($max, $v);
             } catch (Throwable $exception) {
                 return false;
