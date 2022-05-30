@@ -10,6 +10,8 @@ namespace HughCube\Laravel\Validation\Tests;
 
 use HughCube\Laravel\Validation\ServiceProvider;
 use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
@@ -45,11 +47,11 @@ class TestCase extends OrchestraTestCase
      * @param $data
      * @param $rules
      * @return array
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     protected function validate($data, $rules)
     {
-        /** @var \Illuminate\Validation\Validator $validator */
+        /** @var Validator $validator */
         $validator = $this->getValidationFactory()->make($data, $rules);
 
         if(method_exists($validator, 'valid')){
