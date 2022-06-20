@@ -8,10 +8,10 @@
 
 namespace HughCube\Laravel\Validation\Rules;
 
-class DValue extends RuleStringable
+class Min extends RuleStringable
 {
     /**
      * The name of the rule.
      */
-    protected $rule = 'default';
+    protected $rule = 'min';
 }
