@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: hugh.li
  * Date: 2022/6/20
- * Time: 18:32
+ * Time: 18:32.
  */
 
 namespace HughCube\Laravel\Validation\Rules;
@@ -34,7 +34,7 @@ class RuleStringable
     /**
      * Create a new in rule instance.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      */
     public function __construct($value, $rule = null)
     {
