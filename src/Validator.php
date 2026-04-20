@@ -233,25 +233,8 @@ class Validator extends \Illuminate\Validation\Validator
      */
     protected static function stripSpaces($value)
     {
-        $pattern = '/['
-            .'\x{0009}-\x{000D}'
-            .'\x{0020}'
-            .'\x{0085}'
-            .'\x{00A0}'
-            .'\x{00AD}'
-            .'\x{034F}'
-            .'\x{1680}'
-            .'\x{180E}'
-            .'\x{2000}-\x{200B}'
-            .'\x{2028}\x{2029}'
-            .'\x{202F}'
-            .'\x{205F}'
-            .'\x{2060}'
-            .'\x{2800}'
-            .'\x{3000}'
-            .'\x{3164}'
-            .'\x{FEFF}'
-            .']+/u';
+        // phpcs:ignore Generic.Files.LineLength.TooLong
+        $pattern = '/[\x{0009}-\x{000D}\x{0020}\x{0085}\x{00A0}\x{00AD}\x{034F}\x{1680}\x{180E}\x{2000}-\x{200B}\x{2028}\x{2029}\x{202F}\x{205F}\x{2060}\x{2800}\x{3000}\x{3164}\x{FEFF}]+/u';
 
         $result = preg_replace($pattern, '', $value);
 
