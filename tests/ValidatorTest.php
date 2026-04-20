@@ -241,6 +241,56 @@ class ValidatorTest extends TestCase
         }
     }
 
+    public function testValidateStripSpaces()
+    {
+        foreach (
+            [
+                // 半角空格
+                ['张 三', '张三'],
+                [' 张三 ', '张三'],
+                ['  张  三  ', '张三'],
+                // 全角空格 U+3000
+                ["张\u{3000}三", '张三'],
+                // NBSP U+00A0
+                ["张\u{00A0}三", '张三'],
+                // ZWSP U+200B
+                ["张\u{200B}三", '张三'],
+                // BOM U+FEFF
+                ["\u{FEFF}张三", '张三'],
+                // 制表符/换行/回车
+                ["张\t三", '张三'],
+                ["张\r\n三", '张三'],
+                // SOFT HYPHEN / CGJ / MVS
+                ["张\u{00AD}三", '张三'],
+                ["张\u{034F}三", '张三'],
+                ["张\u{180E}三", '张三'],
+                // HANGUL FILLER / BRAILLE BLANK (过滤绕过)
+                ["ad\u{3164}min", 'admin'],
+                ["ad\u{2800}min", 'admin'],
+                // 保留: ZWNJ (波斯/印地语)
+                ["می\u{200C}خواهم", "می\u{200C}خواهم"],
+                // 保留: 变体选择符 (emoji 彩色变体)
+                ["❤\u{FE0F}", "❤\u{FE0F}"],
+                // 保留: BIDI 控制字符
+                ["\u{200E}abc", "\u{200E}abc"],
+                // 不含空白的字符串保持不变
+                ['admin', 'admin'],
+                ['张三', '张三'],
+                // 非字符串值保持不变
+                [0, 0],
+                [1, 1],
+                [true, true],
+                [[1, 2], [1, 2]],
+            ] as $value
+        ) {
+            $key = $this->randomString();
+            $results = $this->validate([$key => $value[0]], [$key => 'strip_spaces']);
+
+            $this->assertTrue(Arr::has($results, $key));
+            $this->assertSame($value[1], Arr::get($results, $key));
+        }
+    }
+
     public function testHybridValidate()
     {
         /** Zero is passable */
@@ -264,5 +314,67 @@ class ValidatorTest extends TestCase
         $key = $this->randomString();
         $results = $this->validate([$key => 0], [$key => ['required', 'remove_if_zero']]);
         $this->assertFalse(Arr::has($results, $key));
+    }
+
+    public function testValidateDefaultOnWildcard()
+    {
+        /** default should NOT override an existing nested value. */
+        $results = $this->validate(
+            ['arr' => [['log' => 'hello']]],
+            ['arr.*.log' => 'default:xx']
+        );
+        $this->assertSame('hello', Arr::get($results, 'arr.0.log'));
+
+        /** default should fill in the missing nested value. */
+        $results = $this->validate(
+            ['arr' => [['log' => 'hello'], ['name' => 'x']]],
+            ['arr.*.log' => 'default:xx']
+        );
+        $this->assertSame('hello', Arr::get($results, 'arr.0.log'));
+        $this->assertSame('xx', Arr::get($results, 'arr.1.log'));
+    }
+
+    public function testStripSpacesOnWhitespaceOnlyValue()
+    {
+        /** 仅空白字符串在 Laravel 的 presentOrRuleIsImplicit 下被视为 not present;
+         *  StripSpaces 必须是 implicit 才能触发. */
+        $key = $this->randomString();
+        $results = $this->validate([$key => '  '], [$key => 'strip_spaces']);
+        $this->assertSame('', Arr::get($results, $key));
+
+        /** 链式: strip_spaces 先把 '  ' 改成 '', set_null_if_empty_string 再置 null */
+        $key = $this->randomString();
+        $results = $this->validate(
+            [$key => '  '],
+            [$key => 'strip_spaces|set_null_if_empty_string']
+        );
+        $this->assertNull(Arr::get($results, $key));
+    }
+
+    public function testImplicitZeroAndNullRules()
+    {
+        /** set_null_if_zero / remove_if_null / remove_if_zero 是 implicit */
+        $key = $this->randomString();
+        $results = $this->validate([$key => 0], [$key => 'set_null_if_zero']);
+        $this->assertNull(Arr::get($results, $key));
+
+        $key = $this->randomString();
+        $results = $this->validate([$key => null], [$key => 'remove_if_null']);
+        $this->assertFalse(Arr::has($results, $key));
+
+        $key = $this->randomString();
+        $results = $this->validate([$key => 0], [$key => 'remove_if_zero']);
+        $this->assertFalse(Arr::has($results, $key));
+    }
+
+    public function testSetNullIfEmptyOnWildcard()
+    {
+        $results = $this->validate(
+            ['arr' => [['log' => ''], ['log' => 'hi'], ['log' => 0]]],
+            ['arr.*.log' => 'set_null_if_empty']
+        );
+        $this->assertNull(Arr::get($results, 'arr.0.log'));
+        $this->assertSame('hi', Arr::get($results, 'arr.1.log'));
+        $this->assertNull(Arr::get($results, 'arr.2.log'));
     }
 }

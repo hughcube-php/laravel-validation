@@ -25,7 +25,7 @@ class RuleStringable
     /**
      * @return static
      */
-    public static function value($value, $rule = null)
+    public static function value($value = null, $rule = null)
     {
         /** @phpstan-ignore-next-line */
         return new static($value, $rule);
@@ -36,7 +36,7 @@ class RuleStringable
      *
      * @param mixed $value
      */
-    public function __construct($value, $rule = null)
+    public function __construct($value = null, $rule = null)
     {
         $this->value = $value;
         $this->rule = $rule ?? $this->rule;
@@ -51,6 +51,6 @@ class RuleStringable
      */
     public function __toString()
     {
-        return $this->rule.':'.$this->value;
+        return null === $this->value ? strval($this->rule) : $this->rule.':'.$this->value;
     }
 }
