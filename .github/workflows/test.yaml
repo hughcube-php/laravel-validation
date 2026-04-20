@@ -6,10 +6,11 @@ jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
     strategy:
+      fail-fast: false
       max-parallel: 15
       matrix:
-        operating-system: [ ubuntu-latest, windows-latest, macOS-latest ]
-        php-versions: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
       - name: Checkout
@@ -19,10 +20,9 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-versions }}
-          extension-csv: mbstring, xdebug #optional, setup extensions
-          ini-values-csv: post_max_size=256M, short_open_tag=On #optional, setup php.ini configuration
-          coverage: xdebug #optional, setup coverage driver
-          pecl: true #optional, setup PECL
+          extensions: mbstring, xdebug
+          ini-values: post_max_size=256M, short_open_tag=On
+          coverage: xdebug
 
       - name: System Setting
         run: |
@@ -33,7 +33,7 @@ jobs:
         run: composer validate
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: Run PHPUnit
         run: |
